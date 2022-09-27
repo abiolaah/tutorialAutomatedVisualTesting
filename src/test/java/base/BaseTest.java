@@ -1,0 +1,37 @@
+package base;
+
+import com.applitools.eyes.selenium.Eyes;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+
+public class BaseTest {
+
+    protected static WebDriver driver;
+    protected static EyesManager eyesManager;
+
+    @BeforeClass
+    public static void setUp() {
+        Properties props = System.getProperties();
+        try {
+            props.load(new FileInputStream(new File("resources/test.properties")));
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        driver = new ChromeDriver();
+        eyesManager = new EyesManager(driver, "The Internet");
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        driver.quit();
+        eyesManager.abort();
+    }
+}
